@@ -1,7 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 
-# ڕێکخستنی لاپەڕە و دیزاینی فول مودرێن (Glassmorphism & Dynamic UI)
+# ڕێکخستنی لاپەڕە و دیزاینی فول مودرێن
 st.markdown(
     """
     <style>
@@ -13,7 +13,6 @@ st.markdown(
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* سەرپەڕەی فول مودرێن */
     .header-card {
         background: rgba(30, 41, 59, 0.7);
         backdrop-filter: blur(16px);
@@ -26,7 +25,6 @@ st.markdown(
         margin-bottom: 30px;
     }
 
-    /* سندوقی وەڵام و ناوەرۆک بە دیزاینی شوشەیی */
     .content-box {
         background: rgba(15, 23, 42, 0.85);
         backdrop-filter: blur(12px);
@@ -37,7 +35,6 @@ st.markdown(
         margin-top: 20px;
     }
 
-    /* دوگمە مودرێنەکان */
     .stButton>button {
         width: 100%;
         border-radius: 16px;
@@ -56,7 +53,6 @@ st.markdown(
         background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
     }
 
-    /* خانەی نووسین */
     .stTextInput textarea, .stTextArea textarea {
         background-color: rgba(30, 41, 59, 0.6) !important;
         color: #ffffff !important;
@@ -68,7 +64,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# سەرپەڕەی سەرەکی
 st.markdown(
     """
     <div class="header-card">
@@ -90,5 +85,61 @@ try:
 
     life_question = st.text_area("پرسیار یان بابەتێ خۆ ل ڤێرە بنڤیسە:", placeholder="لێرە بنووسە...")
 
-    if st.button("وەرگرتنی وەڵامی فول مودرێن و ق
-                 
+    if st.button("وەرگرتنی وەڵامی قووڵ"):
+        if life_question:
+            with st.spinner("خەریکی شرۆڤەکرن و ئامادەکرنا وەڵامێیە..."):
+                try:
+                    query_keyword = "nature space galaxy light philosophy"
+                    if "خوێن" in life_question or "خویندن" in life_question or "دخول" in life_question:
+                        query_keyword = "library books studying education dark academia"
+                    elif "خودێ" in life_question or "باوەر" in life_question or "ئاین" in life_question:
+                        query_keyword = "cosmos night sky stars universe spiritual"
+                    elif "مرۆڤ" in life_question or "ژیان" in life_question or "دژیم" in life_question:
+                        query_keyword = "deep ocean mountain horizon landscape cinematic"
+
+                    bg_image_url = f"https://source.unsplash.com/1600x900/?{query_keyword}"
+
+                    st.markdown(
+                        f"""
+                        <style>
+                        .stApp {{
+                            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.92)), url('{bg_image_url}');
+                            background-size: cover;
+                            background-position: center;
+                            background-attachment: fixed;
+                        }}
+                        </style>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    prompt = f"""
+                    تو زانا، فەیلەسوف و شارەزایەکی مەزن لە بواری ئاینی، دەروونناسی و وەڵامدانی پرسیارە قووڵەکانی ژیان.
+                    کەسێک ئەم پرسیارەی هەیە: '{life_question}'
+                    تکایە وەڵامێکی زۆر لۆژیکی، ئارامبەخش، لەسەر بنەمای قورئان، حیکمەتی دروستبوون و زانستی سەردەم بە زمانی کوردی پێشکەش بکە.
+                    """
+                    
+                    response = model.generate_content(prompt)
+                    
+                    st.markdown(
+                        f"""
+                        <div class="content-box">
+                            <h3 style='color: #38bdf8; margin-bottom: 15px;'>📌 وەڵام و شرۆڤەی قووڵ:</h3>
+                            <div style='line-height: 1.8; font-size: 16px; color: #e2e8f0;'>
+                                {response.text.replace(chr(10), '<br>')}
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                except Exception as e:
+                    st.error(f"⚠️ هەڵە ڕووی دا: {e}")
+        else:
+            st.warning("⚠️ تکایە پێشەکی پرسیارەک خۆ ل ڤێرە بنڤیسە.")
+
+except Exception as e:
+    st.error("⚠️ تکایە دڵنیابە کە کلیلێ سیستەمی لە بەشی Secretsـی Streamlit بە ڕێکی دانراوە.")
+
+st.markdown("---")
+st.markdown("<div style='text-align: center; color: #94a3b8; font-size: 13px;'>دیزاینی فول مودرێن • دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
