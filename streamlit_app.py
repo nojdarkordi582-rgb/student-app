@@ -36,7 +36,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# حەمد و شوکر بوو خودایێ مەزن بن (ب ڕەنگێ سەوزێ گەشاوە و بروسکەدار)
+# حەمد و شوکر بوو خودایێ مەزن بن
 st.markdown("<h3 class='glowing-box'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>", unsafe_allow_html=True)
 st.markdown("<h4 class='glowing-box'>« الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ »</h4>", unsafe_allow_html=True)
 st.markdown("---")
@@ -44,16 +44,14 @@ st.markdown("---")
 # ناونیشانی سەرەکی بەرنامە
 st.title("📚 بەرنامەیێ قوتابیان - هەمی بابەتێن پرۆفیشناڵ")
 
-# وەرگرتنا کلیلێ API لە بەکارهێنەر بۆ کارپێکرنا سیستەمی شیکارکردن
-api_key = st.text_input("کلیلێ سیستەمی (API Key) لێرە بنڤیسە:", type="password")
-
-# دیارکردنی دروستکەری بەرنامە (بە هەمان ڕووناکییا گەش)
+# دیارکردنی دروستکەری بەرنامە
 st.markdown("---")
 st.markdown("<div class='glowing-box' style='font-size: 18px;'>👨‍💻 دروستکەر و گەشەپێدەری بەرنامەی: نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
 st.markdown("---")
 
-if api_key:
-    # ڕێکخستنا سیستەمی پشتەوە
+# خوێندنەوەی کلیلێ API بەخۆکار لە Secretsـی Streamlit
+try:
+    api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
@@ -107,7 +105,7 @@ if api_key:
                         st.write(response.text)
                         
                     except Exception as e:
-                        st.error(f"⚠️ ئەنجامدانا شیکاریێ سەرکەفتن نەبوو. تکایە پشکنی دەقێ کلیلێ سیستەمی: {e}")
+                        st.error(f"⚠️ ئەنجامدانا شیکاریێ سەرکەفتن نەبوو: {e}")
             else:
                 st.warning("⚠️ تکایە پێشەکی وێنەیەک باربکە یان پرسیارەک بنڤیسە.")
 
@@ -130,3 +128,7 @@ if api_key:
         if st.button("پاشەکەوتکرنا تێبینیێ"):
             if note:
                 st.success(f'✅ پەیاما تە وەرگرت: "{note}"')
+
+except Exception as e:
+    st.error("⚠️ تکایە دڵنیابە کە کلیلێ API لە بەشی Secretsـی Streamlit بە ناوی (GEMINI_API_KEY) دابنێیت.")
+    
