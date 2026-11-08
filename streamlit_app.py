@@ -42,10 +42,10 @@ st.markdown("<h4 class='glowing-box'>« الْحَمْدُ لِلَّهِ رَب
 st.markdown("---")
 
 # ناونیشانی سەرەکی بەرنامە
-st.title("📚 بەرنامەیێ قوتابیان - هەمی بابەتێن پرۆفیشناڵ (ب AI)")
+st.title("📚 بەرنامەیێ قوتابیان - هەمی بابەتێن پرۆفیشناڵ")
 
-# وەرگرتنا کلیلێ API لە بەکارهێنەر بۆ کارپێکرنا AI
-api_key = st.text_input("کلیلێ API (Google Gemini API Key) لێرە بنڤیسە بۆ کارپێکرنا AI:", type="password")
+# وەرگرتنا کلیلێ API لە بەکارهێنەر بۆ کارپێکرنا سیستەمی شیکارکردن
+api_key = st.text_input("کلیلێ سیستەمی (API Key) لێرە بنڤیسە:", type="password")
 
 # دیارکردنی دروستکەری بەرنامە (بە هەمان ڕووناکییا گەش)
 st.markdown("---")
@@ -53,24 +53,24 @@ st.markdown("<div class='glowing-box' style='font-size: 18px;'>👨‍💻 در�
 st.markdown("---")
 
 if api_key:
-    # ڕێکخستنا API
+    # ڕێکخستنا سیستەمی پشتەوە
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     nav = st.text_input("تکایە ناڤێ خۆ بنڤیسە:")
 
     if nav:
-        st.success(f"سلاڤ، {nav}! بەرنامە نوکە بە تەواوی ل ژێر دەستهەڵاتا AI دکار دکەت.")
+        st.success(f"سلاڤ، {nav}! بەرنامە نوکە بە تەواوی ئامادەیە بۆ خزمەتکرنا تە.")
 
     menu = st.selectbox("تکایە خزمەتگوزارییەکێ هەلبژێرە:", [
-        "شیکارکرنا پرسیاران ب ڕێکا AI (پشک بە پشک) 🤖",
+        "شیکارکرنا پرسیاران (پشک بە پشک و ژمارەیی) 📖",
         "دیتنا خشتەیا رۆژی (وانە) 📅",
         "ئامۆژگاریێن خوەیندنێ و خۆشیێ 💡",
         "نڤیسین و پاشەکەوتکرنا تێبینیەکێ 📝"
     ])
 
-    if menu == "شیکارکرنا پرسیاران ب ڕێکا AI (پشک بە پشک) 🤖":
-        st.subheader("--- شیکارکەرێ پرسیارێن پرۆفیشناڵ ب ڕێکا AI 🤖 ---")
+    if menu == "شیکارکرنا پرسیاران (پشک بە پشک و ژمارەیی) 📖":
+        st.subheader("--- شیکارکەرێ پرسیارێن پەڕتووکی ---")
         
         subject_category = st.selectbox("تکایە بابەتی هەلبژێرە:", [
             "بیرکاری (Mathematics)",
@@ -83,9 +83,9 @@ if api_key:
         uploaded_file = st.file_uploader("وێنەیەکێ پرسیارێ باربکە:", type=["jpg", "jpeg", "png"])
         question_text = st.text_input("یان دەقێ پرسیارێ (نڤیسین) لێرە بنڤیسە:")
 
-        if st.button("ناردن بۆ AI و دەرئێخستنا شیکاریا تەواو"):
+        if st.button("دەرئێخستنا شیکاریا تەواو"):
             if uploaded_file is not None or question_text:
-                with st.spinner("AI خەریکی خوەندنا وێنە و پرسیارێیە و شیکاریا پشک بە پشک دکەت..."):
+                with st.spinner("خەریکی خوەندنا وێنە و پرسیارێیە و شیکاریا پشک بە پشک دکەت..."):
                     try:
                         image = Image.open(uploaded_file) if uploaded_file else None
                         
@@ -102,12 +102,12 @@ if api_key:
 
                         response = model.generate_content(contents)
                         
-                        st.success("✅ شیکاریا AI ب سەرکەفتن هاتە ئەنجامدان!")
-                        st.markdown("### 📌 شیکاریا زیرەک:")
+                        st.success("✅ شیکاریا پرسیارێ ب سەرکەفتن هاتە ئەنجامدان!")
+                        st.markdown("### 📌 شیکاریا پەڕتووکی:")
                         st.write(response.text)
                         
                     except Exception as e:
-                        st.error(f"⚠️ پەیوەندی ب AI سەرکەفتن نەبوو. تکایە پشکنی دەقێ کلیلێ API: {e}")
+                        st.error(f"⚠️ ئەنجامدانا شیکاریێ سەرکەفتن نەبوو. تکایە پشکنی دەقێ کلیلێ سیستەمی: {e}")
             else:
                 st.warning("⚠️ تکایە پێشەکی وێنەیەک باربکە یان پرسیارەک بنڤیسە.")
 
@@ -132,5 +132,5 @@ if api_key:
                 st.success(f'✅ پەیاما تە وەرگرت: "{note}"')
 
 else:
-    st.info("📌 بۆ چالاککرنا AI، تکایە کلیلەکێ API (Gemini API Key) لە سەرەوەدا بنووسە تاوەکو بەرنامە ڕاستەوخۆ دەست بە کار بکات.")
+    st.info("📌 بۆ چالاککرنا سیستەمی شیکارکرنێ، تکایە کلیلەکێ (API Key) لە سەرەوەدا بنووسە تاوەکو بەرنامە ڕاستەوخۆ دەست بە کار بکات.")
     
