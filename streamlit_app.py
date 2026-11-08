@@ -1,55 +1,80 @@
 import streamlit as st
-from PIL import Image
 import google.generativeai as genai
 
-# ڕێکخستنی پەڕە بۆ RTL (ڕاست بۆ چەپ) و دیزاینی کارت
+# ڕێکخستنی لاپەڕە و دیزاینی فول مودرێن (Glassmorphism & Dynamic UI)
 st.markdown(
     """
     <style>
     body, .stApp {
         direction: rtl;
         text-align: right;
-        background-color: #0e1117;
-        color: #ffffff;
+        background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        color: #f8fafc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
+    /* سەرپەڕەی فول مودرێن */
     .header-card {
-        background: linear-gradient(135deg, #1b5e20, #2e7d32);
-        padding: 22px;
-        border-radius: 18px;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 24px;
         text-align: center;
-        color: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        margin-bottom: 25px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
     }
 
+    /* سندوقی وەڵام و ناوەرۆک بە دیزاینی شوشەیی */
+    .content-box {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        margin-top: 20px;
+    }
+
+    /* دوگمە مودرێنەکان */
     .stButton>button {
         width: 100%;
-        border-radius: 14px;
+        border-radius: 16px;
         font-weight: bold;
         height: 55px;
-        background: linear-gradient(135deg, #1f2937, #111827);
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        transition: all 0.3s ease;
     }
     
     .stButton>button:hover {
         transform: translateY(-3px);
-        border-color: #4caf50;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+        background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+    }
+
+    /* خانەی نووسین */
+    .stTextInput textarea, .stTextArea textarea {
+        background-color: rgba(30, 41, 59, 0.6) !important;
+        color: #ffffff !important;
+        border-radius: 14px !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
+# سەرپەڕەی سەرەکی
 st.markdown(
     """
     <div class="header-card">
-        <div style="font-size: 16px; opacity: 0.9;">🌙 شەف باش</div>
-        <h2 style="margin: 5px 0;">سلاڤ، نوژدار</h2>
-        <div style="font-size: 14px; opacity: 0.8;">بەرنامەیێ قوتابیان - هەمی بابەتێن پرۆفیشناڵ</div>
+        <div style="font-size: 15px; color: #38bdf8; font-weight: 600;">✨ پلاتفۆرمی زیرەک و قووڵی ژیان</div>
+        <h2 style="margin: 8px 0; color: #ffffff;">سلاڤ، نوژدار</h2>
+        <div style="font-size: 13px; color: #94a3b8;">وەڵامدانەوەی پرسیارێن فەلسەفی، دەروونی و باوەڕێ ب کوالیتیەکا بلندا مۆدێرن</div>
     </div>
     """,
     unsafe_allow_html=True
@@ -60,97 +85,10 @@ try:
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
-    st.markdown("### 🗂️ خزمەتگوزاریێن قوتابیان")
+    st.markdown("### 🌌 ناڤەندا پرسیارێن قووڵ و ژیانێ")
+    st.write("پسیارا خو ل ڤێرە بنڤیسە (بۆ نموونە: بۆچی ئەز دژیم؟ خودێ کیە؟ ئەز بۆ چ دخوینم؟)")
 
-    col1, col2, col3 = st.columns(3)
+    life_question = st.text_area("پرسیار یان بابەتێ خۆ ل ڤێرە بنڤیسە:", placeholder="لێرە بنووسە...")
 
-    with col1:
-        btn_classes = st.button("🎓 شیکارکرنا پرسیاران")
-    with col2:
-        btn_schedule = st.button("📅 خشتەیا رۆژی")
-    with col3:
-        btn_advice = st.button("💡 ئامۆژگاریێن خوەیندنێ")
-
-    col4, col5 = st.columns(2)
-    with col4:
-        btn_notes = st.button("📝 تێبینیێن من")
-
-    st.markdown("---")
-
-    selected_service = "شیکارکرنا پرسیاران"
-    if btn_classes:
-        selected_service = "شیکارکرنا پرسیاران"
-    elif btn_schedule:
-        selected_service = "خشتەیا رۆژی"
-    elif btn_advice:
-        selected_service = "ئامۆژگاریێن خوەیندنێ"
-    elif btn_notes:
-        selected_service = "تێبینیێن من"
-
-    if selected_service == "شیکارکرنا پرسیاران":
-        st.subheader("--- شیکارکەرێ پرسیارێن پەڕتووکی ---")
-        
-        subject_category = st.selectbox("تکایە بابەتی هەلبژێرە:", [
-            "بیرکاری (Mathematics)",
-            "فیزیا و کیمیا (Physics & Chemistry)",
-            "مێژوو و جۆگرافیا (History & Geography)",
-            "زمان و وێژە (Literature & Languages)",
-            "زینده‌وه‌رزانی (Biology)"
-        ])
-
-        uploaded_file = st.file_uploader("وێنەیەکێ پرسیارێ باربکە:", type=["jpg", "jpeg", "png"])
-        question_text = st.text_input("یان دەقێ پرسیارێ (نڤیسین) لێرە بنڤیسە:")
-
-        if st.button("دەرئێخستنا شیکاریا تەواو"):
-            if uploaded_file is not None or question_text:
-                with st.spinner("خەریکی خوەندنا وێنە و پرسیارێیە و شیکاریا پشک بە پشک دکەت..."):
-                    try:
-                        image = Image.open(uploaded_file) if uploaded_file else None
-                        
-                        prompt = f"""
-                        تو مامۆستایەکی تایبەت و شارەزای لە بوارەی ({subject_category}). 
-                        تکایە ئەم پرسیارە یان ئەم وێنەیە بە شێوازێکی پشک بە پشک، ژمارەیی، زانستی و ورد شیکار بکە. 
-                        هەموو هەنگاوەکانی حلکردن، یاساکان و ئەنجامی کۆتایی بە ڕێکوپێکی بنووسە.
-                        دەقێ زێدە: {question_text}
-                        """
-                        
-                        contents = [prompt]
-                        if image:
-                            contents.append(image)
-
-                        response = model.generate_content(contents)
-                        
-                        st.success("✅ شیکاریا پرسیارێ ب سەرکەفتن هاتە ئەنجامدان!")
-                        st.markdown("### 📌 شیکاریا پەڕتووکی:")
-                        st.write(response.text)
-                        
-                    except Exception as e:
-                        st.error(f"⚠️ ئەنجامدانا شیکاریێ سەرکەفتن نەبوو: {e}")
-            else:
-                st.warning("⚠️ تکایە پێشەکی وێنەیەک باربکە یان پرسیارەک بنڤیسە.")
-    
-    elif selected_service == "خشتەیا رۆژی":
-        st.subheader("--- خشتەیا وانەیێن هەفتەیی 📅 ---")
-        st.write("• **شەممە:** بیرکاری و زانست")
-        st.write("• **دووشەممە:** فیزیا و کیمیا")
-        st.write("• **سێشەممە:** مێژوو و وێژە")
-        st.write("• **چارشەممە:** زمان و زیندەوەرورزانی")
-        st.write("• **پێنجشەممە:** تاقیکردنەوە و پشوو")
-
-    elif selected_service == "ئامۆژگاریێن خوەیندنێ":
-        st.subheader("--- ئامۆژگاریێن خوەیندنێ و خۆشیێ 💡 ---")
-        st.markdown("1. هەمیشە دەمێ خۆ ڕێکخە و پۆمۆدۆرۆ تاقی بکە.")
-        st.markdown("2. باوەریا تە ب خۆ هەبێت، تو دشکەی سەرکەفتنی بدەستی!")
-
-    elif selected_service == "تێبینیێن من":
-        st.subheader("--- پشکا تێبینیان 📝 ---")
-        note = st.text_input("تێبینیا خۆ ل ڤێرە بنڤیسە:")
-        if st.button("پاشەکەوتکرنا تێبینیێ"):
-            if note:
-                st.success(f'✅ پەیاما تە وەرگرت: "{note}"')
-
-except Exception as e:
-    st.error("⚠️ تکایە دڵنیابە کە کلیلێ سیستەمی لە بەشی Secretsـی Streamlit بە ڕێکی دانراوە.")
-
-st.markdown("---")
-st.markdown("<div style='text-align: center; color: #888; font-size: 14px;'>دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
+    if st.button("وەرگرتنی وەڵامی فول مودرێن و ق
+                 
