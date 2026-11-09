@@ -1,77 +1,98 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import random
 
-# ڕێکخستنی سەرەکی
-st.set_page_config(page_title="بەرەو خودێ", page_icon="🤲", layout="centered")
+# ڕێکخستنا سەرەکی پەڕەی جیهانی
+st.set_page_config(
+    page_title="بەرەو خودێ | Bero Xode", 
+    page_icon="🤲", 
+    layout="centered"
+)
 
-duaa_database = {
-    "دوعایێن ئارامیا دلان و ڕووناکیا ناخی": [
-        "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ (ب یادا خودێ دل ئارام دبن).",
-        "يا حي يا قيوم برحمتك أستغيث، أصلح لي شأني كله.",
-        "اللهم اني أسألك قلباً خاشعاً وعلماً نافعاً.",
-        "حسبنا الله ونعم الوكيل، نعم المولى ونعم النصير."
-    ],
-    "زکرێن پاراستنێ ل دەمێ قفلکرنا موبایلێ": [
-        "بِسْمِ اللَّهِ الَّذِي لَا يَضُرِّمعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ.",
-        "أعوذ بكلمات الله التامات من شر ما خلق.",
-        "اللهم احفظني من بين يدي ومن خلفي.",
-        "لا حول ولا قوة إلا بالله العلي العظيم."
-    ],
-    "دوعایێن رزق، برەکەت و ڤەکرنا دەرگەهان": [
-        "اللهم إني أسألك رزقاً حلالاً طيباً مبارکاً فيه.",
-        "رب اني لما أنزلت إلي من خير فقير.",
-        "يا رزاق يا كریم، ارزقني من حيث لا احتسب."
-    ],
-    "ئایەتێن قورئانی یێن کورتی کاریگەر": [
-        "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي.",
-        "وَمَنْ يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا.",
-        "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي."
-    ]
-}
+# دیزاینی تایبەت و سیستەمی CSSـی جیهانی (Glassmorphism)
+st.markdown("""
+    <style>
+    .main {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #ffffff;
+    }
+    .stSelectbox label {
+        color: #34d399 !important;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align: right; direction: rtl; color: #059669;'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: right; direction: rtl; color: #ffffff;'>سلاڤ، نوژدار - سیستەمێ ئاگادارییێن شاشەیا قفل</h3>", unsafe_allow_html=True)
+# هەڵبژاردنی زمان (Multi-language Support)
+lang = st.sidebar.selectbox("🌐 زمان / Language / اللغة", ["کوردی (بادینی)", "English", "العربية"])
 
-duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ هەلبژێرە:", list(duaa_database.keys()))
+# ناوەرۆک و داتابەیس بە پێی زمان
+if lang == "کوردی (بادینی)":
+    title_text = "بەرەو خودێ"
+    subtitle_text = "ڕێبەرێ ڕۆژانە یێ دوعا و زکران"
+    select_label = "جۆرێ زکر یان دوعایێ هەلبژێرە:"
+    btn_text = "✨ نیشادانا دوعایێ"
+    db = {
+        "دوعایێن ئارامیا دلان": [
+            "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ (ب یادا خودێ دل ئارام دبن).",
+            "يا حي يا قيوم برحمتك أستغيث، أصلح لي شأني كله.",
+            "اللهم اني أسألك قلباً خاشعاً وعلماً نافعاً."
+        ],
+        "زکرێن پاراستنێ": [
+            "بِسْمِ اللَّهِ الَّذِي لَا يَضُرِّمعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ.",
+            "أعوذ بكلمات الله التامات من شر ما خلق.",
+            "اللهم احفظني من بين يدي ومن خلفي وعن يميني وعن شمالي."
+        ],
+        "دوعایێن رزق و برەکەتێ": [
+            "اللهم إني أسألك رزقاً حلالاً طيباً مبارکاً فيه.",
+            "رب اني لما أنزلت إلي من خير فقير.",
+            "يا رزاق يا كریم، ارزقني من حيث لا احتسب."
+        ]
+    }
+elif lang == "English":
+    title_text = "Bero Xode"
+    subtitle_text = "Daily Islamic Duas & Zikr Guide"
+    select_label = "Select category:"
+    btn_text = "✨ Show Dua"
+    db = {
+        "Peace of Heart": [
+            "Verily, in the remembrance of Allah do hearts find rest.",
+            "O Ever-Living, O Self-Existing, by Your mercy I seek help.",
+        ],
+        "Protection": [
+            "In the name of Allah with Whose name nothing is harmed.",
+            "I seek refuge in the Perfect Words of Allah.",
+        ]
+    }
+else:
+    title_text = "نحو الله"
+    subtitle_text = "دليل الأدعية والأذكار اليومية"
+    select_label = "اختر التصنيف:"
+    btn_text = "✨ إظهار الدعاء"
+    db = {
+        "أدعية الطمأنينة": [
+            "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ.",
+            "يا حي يا قيوم برحمتك أستغيث."
+        ]
+    }
 
-if st.button("🔔 ناردنا دوعایێ بۆ سەر شاشەیا قفلا مۆبایلێ"):
-    selected_duaa = random.choice(duaa_database[duaa_category])
-    
-    # نیشاندانی شێوازی پێشاندانی ناو ئەپەکە
+# نیشاندانا سەرەکی
+st.markdown(f"<h1 style='text-align: center; color: #34d399;'>🤲 {title_text}</h1>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: center; color: #94a3b8; font-size: 16px;'>{subtitle_text}</p>", unsafe_allow_html=True)
+st.markdown("---")
+
+# بەشی بژاردە و نیشاندان
+category = st.selectbox(select_label, list(db.keys()))
+
+if st.button(btn_text, use_container_width=True):
+    chosen = random.choice(db[category])
     st.markdown(
         f"""
-        <div style="background: rgba(20, 20, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.15); padding: 18px; border-radius: 20px; text-align: right; direction: rtl; margin-top: 15px;">
-            <div style="font-size: 13px; color: #34d399; font-weight: bold; margin-bottom: 5px;">🤲 بەرەو خودێ • زکرێ نوو</div>
-            <div style='font-size: 15px; color: #ffffff;'>{selected_duaa}</div>
+        <div style="background: rgba(15, 23, 42, 0.8); border: 2px solid #34d399; padding: 20px; border-radius: 16px; text-align: center; margin-top: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+            <p style='font-size: 18px; color: #ffffff; line-height: 1.8;'>{chosen}</p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    # کۆدی JavaScript بۆ پێدانی مۆڵەت و ناردنی ئاگاداری ڕاستەوخۆ بۆ شاشەی قفل
-    js_code = f"""
-    <script>
-    if ("Notification" in window) {{
-        if (Notification.permission === "granted") {{
-            new Notification("🤲 بەرەو خودێ", {{
-                body: "{selected_duaa}",
-                icon: "https://cdn-icons-png.flaticon.com/512/2904/2904843.png"
-            }});
-        }} else if (Notification.permission !== "denied") {{
-            Notification.requestPermission().then(function (permission) {{
-                if (permission === "granted") {{
-                    new Notification("🤲 بەرەو خودێ", {{
-                        body: "{selected_duaa}",
-                        icon: "https://cdn-icons-png.flaticon.com/512/2904/2904843.png"
-                    }});
-                }}
-            }});
-        }}
-    }}
-    </script>
-    """
-    components.html(js_code, height=0)
-
-st.markdown("---")
-st.markdown("<div style='text-align: center; color: gray; font-size: 12px;'>پڕۆژەی بەرەو خودێ • نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
+st.markdown("<br><hr>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #64748b; font-size: 12px;'>Developed by Nozhdar Dzhwar Doski • Global Edition</p>", unsafe_allow_html=True)
