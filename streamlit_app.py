@@ -82,52 +82,51 @@ try:
     model = genai.GenerativeModel('gemini-1.5-flash')
 
     st.markdown("### 📱 رێڤەبەریا دوعایێن شاشەیا قفلا موبایلێ")
-    st.write("ل ڤێرە دشکەی جۆرێ دوعا یان زکری هەلبژێری تاوەکو ب شێوازەکێ ڤەکۆلبوویی بۆ شاشەیا قفل یا موبایلا تە بهێتە ئامادەکرن:")
+    st.write("ل ڤێرە جۆرێ دوعا یان زکری هەلبژێرە:")
 
-    with st.form("lockscreen_form"):
-        duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ بۆ شاشەیا قفل هەلبژێرە:", [
-            "دوعایێن ئارامیا دلان و ڕووناکیا ناخی",
-            "زکرێن پاراستنێ ل دەمێ قفلکرنا موبایلێ",
-            "دوعایێن رزق، برەکەت و ڤەکرنا دەرگەهان",
-            "ئایەتێن قورئانی یێن کورتی کاریگەر"
-        ])
+    duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ بۆ شاشەیا قفل هەلبژێرە:", [
+        "دوعایێن ئارامیا دلان و ڕووناکیا ناخی",
+        "زکرێن پاراستنێ ل دەمێ قفلکرنا موبایلێ",
+        "دوعایێن رزق، برەکەت و ڤەکرنا دەرگەهان",
+        "ئایەتێن قورئانی یێن کورتی کاریگەر"
+    ])
 
-        screen_position = st.radio("تە دڤێت ڤی زکری لە کیژ جهـ ل سەر شاشەیا قفلێ دابنێی؟", [
-            "📍 جهێ سەرەوەی شاشەی (سەرێ کاتی / Clock Area)",
-            "📍 جهێ ناڤەڕаст (لە ناڤەندا شاشەی ب دیمەنەکێ جوان)",
-            "📍 جهێ خوارێ (نێزیکی دوگمەیا ڤەکرنێ)"
-        ])
+    screen_position = st.radio("تە دڤێت ڤی زکری لە کیژ جهـ ل سەر شاشەیا قفلێ دابنێی؟", [
+        "📍 جهێ سەرەوەی شاشەی (سەرێ کاتی / Clock Area)",
+        "📍 جهێ ناڤەڕаст (لە ناڤەندا شاشەی ب دیمەنەکێ جوان)",
+        "📍 جهێ خوارێ (نێزیکی دوگمەیا ڤەکرنێ)"
+    ])
 
-        submit_btn = st.form_submit_button("✨ چێکرن و دانانا ئۆتۆماتیکی ل سەر شاشەیا قفلێ")
-
-    if submit_btn:
-        with st.spinner("خەریکی ئامادەکرنا زکر و دوعایێن شاشەیا قفلێیە..."):
-            try:
-                prompt = f"""
-                تو پەرەپێدەر و شارەزایەکی ئاینی لە بواری دوعا و زکران.
-                بۆ پشکا ({duaa_category}) و بە ڕەچاوکردنی ئەوەی کە دەبێت لەسەر شاشەی قفلی موبایل (Lock Screen) لە ({screen_position}) دابنرێت،
-                تکایە دوعایەکی زۆر کورت، پڕ لە مانا، کاریگەر و ئارامبەخش بە زمانی کوردی (بادینی) بنووسە لەگەڵ چەند ڕێنماییەکی سادە بۆ چۆنیەتی جێگیرکردنی لەسەر شاشەی موبایل.
-                """
-                response = model.generate_content(prompt)
-                
-                st.markdown(
-                    f"""
-                    <div class="lockscreen-preview">
-                        <div style="font-size: 13px; color: #34d399; margin-bottom: 10px;">🔒 نموونەیا شاشەیا قفل (Lock Screen Preview)</div>
-                        <div style="font-size: 20px; font-weight: bold; color: #ffffff; margin-bottom: 15px;">{screen_position}</div>
-                        <div style='line-height: 1.8; font-size: 17px; color: #ecfdf5; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px;'>
-                            {response.text.replace(chr(10), '<br>')}
-                        </div>
-                        <div style="margin-top: 15px; font-size: 12px; color: #9ca3af;">✅ ب سەرکەفتن هاتە گرێدان ب شاشەیا قفل یا موبایلا تە ڤە!</div>
+    if st.button("✨ چێکرن و دانانا ئۆتۆماتیکی ل سەر شاشەیا قفلێ"):
+        try:
+            # گوهۆڕین: لابەرا st.spinner و بکارئینانا نڤیسینا ئاسایی بۆ ڕێگری کرن ژ رادوەستانێ
+            st.info("⏳ خەریکی ئامادەکرنا دوعایێیە، ب مژەکی کورت...")
+            
+            prompt = f"""
+            تو پەرەپێدەر و شارەزایەکی ئاینی لە بواری دوعا و زکران.
+            بۆ پشکا ({duaa_category}) و بە ڕەچاوکردنی ئەوەی کە دەبێت لەسەر شاشەی قفلی موبایل (Lock Screen) لە ({screen_position}) دابنرێت،
+            تکایە دوعایەکی زۆر کورت، پڕ لە مانا، کاریگەر و ئارامبەخش بە زمانی کوردی (بادینی) بنووسە لەگەڵ چەند ڕێنماییەکی سادە بۆ چۆنیەتی جێگیرکردنی لەسەر شاشەی موبایل.
+            """
+            response = model.generate_content(prompt)
+            
+            st.markdown(
+                f"""
+                <div class="lockscreen-preview">
+                    <div style="font-size: 13px; color: #34d399; margin-bottom: 10px;">🔒 نموونەیا شاشەیا قفل (Lock Screen Preview)</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #ffffff; margin-bottom: 15px;">{screen_position}</div>
+                    <div style='line-height: 1.8; font-size: 17px; color: #ecfdf5; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px;'>
+                        {response.text.replace(chr(10), '<br>')}
                     </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            except Exception as e:
-                st.error(f"⚠️ هەڵە ڕووی دا: {e}")
+                    <div style="margin-top: 15px; font-size: 12px; color: #9ca3af;">✅ ب سەرکەفتن هاتە گرێدان ب شاشەیا قفل یا موبایلا تە ڤە!</div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        except Exception as e:
+            st.error(f"⚠️ هەڵە ڕووی دا: کلیلێ API یان پەیوەندیا تۆرێ کێشە هەیە. هەلە: {e}")
 
 except Exception as e:
-    st.error(f"⚠️ تکایە دڵنیابە کە کلیلێ Secretsـی لە Streamlit بە ڕێکی هاتییە دانان: {e}")
+    st.error(f"⚠️ کێشە لە پشکا Secretsـی دایە: {e}")
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; color: #6ee7b7; font-size: 13px;'>پڕۆژەی بەرەو خودێ (شاشەیا قفل) • دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
