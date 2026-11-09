@@ -1,7 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 
-# ڕێکخستنا لاپەڕەی بۆ RTL و چارەسەرکرنا کێشا کلیککرنێ ل سەر مۆبایلا
+# ڕێکخستنا لاپەڕەی بۆ RTL و دیزاینی فول مۆدێرن
 st.markdown(
     """
     <style>
@@ -24,17 +24,32 @@ st.markdown(
         margin-bottom: 20px;
     }
 
-    .lockscreen-preview {
-        background: rgba(2, 44, 34, 0.95);
-        border: 2px solid rgba(74, 222, 128, 0.5);
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    /* دیزاینی شاشەیا قفل یا موبایلێ (Interactive Lock Screen Container) */
+    .lockscreen-container {
+        background: linear-gradient(180deg, rgba(3, 30, 20, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
+        border: 3px solid rgba(74, 222, 128, 0.4);
+        padding: 30px;
+        border-radius: 35px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
         text-align: center;
         margin-top: 20px;
+        position: relative;
     }
 
-    /* پشتڕاستکرنا وێ چەندێ دوگمە ب ساناهی ل سەر مۆبایلا بهێتە کلیککرن */
+    .clock-display {
+        font-size: 42px;
+        font-weight: 300;
+        color: #ffffff;
+        margin-bottom: 5px;
+        letter-spacing: 2px;
+    }
+
+    .date-display {
+        font-size: 14px;
+        color: #a7f3d0;
+        margin-bottom: 25px;
+    }
+
     .stButton > button {
         width: 100% !important;
         border-radius: 16px !important;
@@ -62,7 +77,7 @@ st.markdown(
     <div class="header-card">
         <div style="font-size: 15px; color: #6ee7b7; font-weight: 600;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
         <h3 style="margin: 6px 0; color: #ffffff;">سلاڤ، نوژدار</h3>
-        <div style="font-size: 13px; color: #a7f3d0;">سیستەمێ دوعایێن شاشەیا قفل • بەرەو خودێ</div>
+        <div style="font-size: 13px; color: #a7f3d0;">سیستەمێ شاشەیا قفل (ب حەزا دلێ خۆ جهی دیار بکە) • بەرەو خودێ</div>
     </div>
     """,
     unsafe_allow_html=True
@@ -73,36 +88,44 @@ try:
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 
-    st.markdown("### 📱 زکر و دوعایێن شاشەیا قفلا موبایلێ")
+    st.markdown("### 📱 دیزاینکرنا شاشەیا قفلا موبایلێ")
     
-    duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ بۆ شاشەیا قفل هەلبژێرە:", [
+    duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ هەلبژێرە:", [
         "دوعایێن ئارامیا دلان و ڕووناکیا ناخی",
         "زکرێن پاراستنێ ل دەمێ قفلکرنا موبایلێ",
         "دوعایێن رزق، برەکەت و ڤەکرنا دەرگەهان",
         "ئایەتێن قورئانی یێن کورتی کاریگەر"
     ])
 
-    screen_position = st.radio("تە دڤێت ڤی زکری لە کیژ جهـ ل سەر شاشەیا قفلێ دابنێی؟", [
-        "📍 جهێ سەرەوەی شاشەی (سەرێ کاتی / Clock Area)",
-        "📍 جهێ ناڤەڕаст (لە ناڤەندا شاشەی ب دیمەنەکێ جوان)",
-        "📍 جهێ خوارێ (نێزیکی دوگمەیا ڤەکرنێ)"
+    # لێرە بەکارهێنەر ب حەزا دلێ خۆ ئەو جهێ دڤێت لسەر شاشەی هەلبژێرێت
+    chosen_position = st.selectbox("🎯 ئەو جهێ دڤێت دوعا لەسەر شاشەیا قفل بهێتە دانان هەلبژێرە:", [
+        "جهێ سەرەوە (ژووریا کاتی / ل بن دەمژمێرێ)",
+        "جهێ ناڤەڕаст (ناڤەندا شاشەی / جهێ سەرەکی)",
+        "جهێ خوارێ (نێزیکی ئاماژەیا ڤەکرنا موبایلێ)",
+        "جهێ تایبەت (سەر شاشەی ب دیمەنەکێ ئازاد)"
     ])
 
-    # دوگمەیا سەرەکی ب بێ ئاریشە و راستەوخۆ
-    if st.button("✨ چێکرنا ب لەز (د ٣ چرکان دا)"):
-        prompt = f"ب زمانێ بادینی، دوعایەکی زۆر کورت، پڕ مانا و کاریگەر بۆ شاشەیا قفلێ د پشکا ({duaa_category}) و جهێ ({screen_position}) بنووسە."
+    if st.button("✨ چێکرنا زکری بۆ شاشەیا قفل (ب ٣ چرکان)"):
+        prompt = f"ب زمانێ بادینی، دوعایەکی زۆر کورت، پڕ مانا و کاریگەر بۆ شاشەیا قفلێ د پشکا ({duaa_category}) بنووسە، گۆیا ل جهێ ({chosen_position}) ل سەر شاشەی هاتبیتە دانان."
         
         response = model.generate_content(prompt)
         
+        # نیشادانا شاشەیا قفل یا پڕۆتۆتایپ ب کات و دیمەنێ ڕاستەقینە
         st.markdown(
             f"""
-            <div class="lockscreen-preview">
-                <div style="font-size: 12px; color: #34d399; margin-bottom: 8px;">🔒 نموونەیا شاشەیا قفل (Lock Screen Preview)</div>
-                <div style="font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 12px;">{screen_position}</div>
-                <div style='line-height: 1.8; font-size: 16px; color: #ecfdf5; background: rgba(0,0,0,0.4); padding: 18px; border-radius: 12px;'>
+            <div class="lockscreen-container">
+                <div class="clock-display">٠٩:٤١</div>
+                <div class="date-display">دووشەممە، ٩ێ چرییا دووماهیێ</div>
+                
+                <div style="font-size: 11px; color: #34d399; margin-bottom: 10px; background: rgba(5,150,105,0.2); padding: 5px 10px; border-radius: 8px; display: inline-block;">
+                    📍 جھێ هاتیە هەلبژارتن: {chosen_position}
+                </div>
+
+                <div style='line-height: 1.8; font-size: 16px; color: #ecfdf5; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(74,222,128,0.3); margin-top: 10px;'>
                     {response.text.replace(chr(10), '<br>')}
                 </div>
-                <div style="margin-top: 12px; font-size: 11px; color: #9ca3af;">✅ ب سەرکەفتن هاتە چێکرن!</div>
+                
+                <div style="margin-top: 20px; font-size: 12px; color: #9ca3af;">🔒 شاشەیا قفلا موبایلێ ب سەرکەفتن هاتە ڕێکخستن!</div>
             </div>
             """,
             unsafe_allow_html=True
