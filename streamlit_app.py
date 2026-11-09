@@ -1,10 +1,10 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 
-# ڕێکخستنا سەرەکی
+# ڕێکخستنی سەرەکی
 st.set_page_config(page_title="بەرەو خودێ", page_icon="🤲", layout="centered")
 
-# گەنجینەیا دوعا و زکران
 duaa_database = {
     "دوعایێن ئارامیا دلان و ڕووناکیا ناخی": [
         "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ (ب یادا خودێ دل ئارام دبن).",
@@ -31,29 +31,47 @@ duaa_database = {
 }
 
 st.markdown("<h2 style='text-align: right; direction: rtl; color: #059669;'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: right; direction: rtl; color: #ffffff;'>سلاڤ، نوژدار - نموونەیا شاشەیا قفل (Lock Screen Notification)</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: right; direction: rtl; color: #ffffff;'>سلاڤ، نوژدار - سیستەمێ ئاگادارییێن شاشەیا قفل</h3>", unsafe_allow_html=True)
 
 duaa_category = st.selectbox("جۆرێ زکر یان دوعایێ هەلبژێرە:", list(duaa_database.keys()))
 
-# دوگمەیا چێکرنێ ب لەزا مەزن
-if st.button("✨ نیشادانا دوعایێ وەک اشعار لسەر شاشەیا قفل"):
+if st.button("🔔 ناردنا دوعایێ بۆ سەر شاشەیا قفلا مۆبایلێ"):
     selected_duaa = random.choice(duaa_database[duaa_category])
     
-    # دیزاینا اشعاری وەک وێنەیا تو نیشا من دای (تەقلیدکرنا اشعارا موبایلێ ل ناڤەڕاستا شاشەی)
+    # نیشاندانی شێوازی پێشاندانی ناو ئەپەکە
     st.markdown(
         f"""
-        <div style="background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 18px 22px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); text-align: right; direction: rtl; margin-top: 25px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                <div style="font-size: 13px; color: #34d399; font-weight: bold;">🤲 بەرەو خودێ • زکرێ نوو</div>
-                <div style="font-size: 11px; color: #9ca3af;">نووکی</div>
-            </div>
-            <div style='line-height: 1.6; font-size: 15px; color: #ffffff; font-weight: 500;'>
-                {selected_duaa}
-            </div>
+        <div style="background: rgba(20, 20, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.15); padding: 18px; border-radius: 20px; text-align: right; direction: rtl; margin-top: 15px;">
+            <div style="font-size: 13px; color: #34d399; font-weight: bold; margin-bottom: 5px;">🤲 بەرەو خودێ • زکرێ نوو</div>
+            <div style='font-size: 15px; color: #ffffff;'>{selected_duaa}</div>
         </div>
         """,
         unsafe_allow_html=True
     )
+
+    # کۆدی JavaScript بۆ پێدانی مۆڵەت و ناردنی ئاگاداری ڕاستەوخۆ بۆ شاشەی قفل
+    js_code = f"""
+    <script>
+    if ("Notification" in window) {{
+        if (Notification.permission === "granted") {{
+            new Notification("🤲 بەرەو خودێ", {{
+                body: "{selected_duaa}",
+                icon: "https://cdn-icons-png.flaticon.com/512/2904/2904843.png"
+            }});
+        }} else if (Notification.permission !== "denied") {{
+            Notification.requestPermission().then(function (permission) {{
+                if (permission === "granted") {{
+                    new Notification("🤲 بەرەو خودێ", {{
+                        body: "{selected_duaa}",
+                        icon: "https://cdn-icons-png.flaticon.com/512/2904/2904843.png"
+                    }});
+                }}
+            }});
+        }}
+    }}
+    </script>
+    """
+    components.html(js_code, height=0)
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; color: gray; font-size: 12px;'>پڕۆژەی بەرەو خودێ • نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
