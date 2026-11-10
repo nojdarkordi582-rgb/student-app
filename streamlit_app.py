@@ -8,8 +8,8 @@ st.set_page_config(
     layout="centered"
 )
 
-# 💡 لێرە لە جهێ "LIRE_KILIL_XI_LERE_DANUR" کلیلێ خۆ یێ AI دابنە
-GOOGLE_API_KEY = "AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKfFptf2VaKQ
+# 💡 کلیلا تە ب تەواوی و ب ڕێک و پێکی لێرە هاتە دانان
+GOOGLE_API_KEY = "AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKFptf2VaKQ"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
@@ -55,7 +55,6 @@ st.markdown("""
         margin: 15px 0;
     }
     
-    /* گڵۆپێ کەسک یێ بوەست و دڤەمرێت (Glow Animation) */
     @keyframes glowing {
         0% { color: #059669; text-shadow: 0 0 2px rgba(52, 211, 153, 0.2); }
         50% { color: #34d399; text-shadow: 0 0 15px rgba(52, 211, 153, 0.9), 0 0 25px rgba(16, 185, 129, 0.6); }
@@ -78,14 +77,14 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center; color: #34d399;'>🌿 زکر • پەناگەها دەروونی و ڕۆحانی</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 15px;'>ڕێبەرێ ڕۆحانی؛ هەر پرسیارەکا دەروونی یان ئاینی بنڤیسە تاوەکو بەرسڤەکا تایبەت و ب ئایەت و دوعا بۆ تە ئامادە بکەت.</p>", unsafe_allow_html=True)
 
-# ناڤێ تە یێ گڵۆپێ (ل جهێ خطە سور)
+# ناڤێ تە یێ گڵۆپی
 st.markdown("<div class='glow-name'>✨ دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی 🌿</div>", unsafe_allow_html=True)
 st.markdown("---")
 
-# سیستەمێ تابان (Tabs) - بێ ناڤێ AI
+# سیستەمێ تابان (Tabs)
 tab1, tab2 = st.tabs(["🌿 ڕێبەرێ ڕۆحانی", "📿 مسبحەیا ئەلیکترۆنی"])
 
-# --- بەشێ یەکەم: بەرسڤدانا دەروونی و ئاینی ---
+# --- بەشێ یەکەم ---
 with tab1:
     st.markdown("<p style='text-align: right; direction: rtl; color: #34d399; font-weight: bold;'>🧠 پرسیار، کێشە یان هەستێ خۆ لێرە بنڤیسە:</p>", unsafe_allow_html=True)
     user_prompt = st.text_area("", placeholder="بۆ نموونە: ئەز ترسا ژ پاشەڕۆژێ هەم، چ بکەم تا دلێ من ئارام ببێت؟ یان پرسیارەکێ ئاینی بپرسە...", height=120)
@@ -122,7 +121,7 @@ with tab1:
                 except Exception as ex:
                     st.error(f"تکایە پشکست ڕوودا یان کلیلا API نە دروستە: {ex}")
 
-# --- بەشێ دووەم: مسبحەیا ئەلیکترۆنی ---
+# --- بەشێ دووەم ---
 with tab2:
     st.markdown("<h3 style='text-align: center; color: #34d399;'>📿 مسبحەیا ئەلیکترۆنی یا زکران</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 14px;'>هەر دەمەکێ تو زکرەکێ دکەی، ل دوگمەیێ بکوتە تاوەکو هژمار پاشەکەوت بێت.</p>", unsafe_allow_html=True)
