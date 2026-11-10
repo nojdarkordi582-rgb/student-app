@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # 💡 لێرە لە جهێ "LIRE_KILIL_XI_LERE_DANUR" کلیلێ خۆ یێ AI دابنە
-"AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKfFptf2VaKQ"
+GOOGLE_API_KEY = "AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKfFptf2VaKQ
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
