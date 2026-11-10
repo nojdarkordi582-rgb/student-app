@@ -8,8 +8,8 @@ st.set_page_config(
     layout="centered"
 )
 
-# 💡 کلیلا تە ب تەواوی و ب ڕێک و پێکی لێرە هاتە دانان
-GOOGLE_API_KEY = "AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKFptf2VaKQ"
+# 💡 کلیلا تە یا نوی و ڕاستەقینە لێرە هاتە دانان
+GOOGLE_API_KEY = "AQ.Ab8RN6KAX6TPelZrCaTgGoYnOCdamd8vnYgWLGcfX7wbRrATuA"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
