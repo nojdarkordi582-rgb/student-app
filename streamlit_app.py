@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# 💡 لێرە لە جهێ "LIRE_KILIL_XI_LERE_DANUR" کلیلێ خۆ یێ AI دابنە (لە دناڤ دوو نیشانێن نقلەیدا)
+# 💡 لێرە لە جهێ "LIRE_KILIL_XI_LERE_DANUR" کلیلێ خۆ یێ AI دابنە
 GOOGLE_API_KEY = "LIRE_KILIL_XI_LERE_DANUR"
 
 try:
@@ -80,5 +80,57 @@ with tab1:
     st.markdown("<p style='text-align: right; direction: rtl; color: #34d399; font-weight: bold;'>🧠 پرسیار، کێشە یان هەستێ خۆ لێرە بنڤیسە:</p>", unsafe_allow_html=True)
     user_prompt = st.text_area("", placeholder="بۆ نموونە: ئەز ترسا ژ پاشەڕۆژێ هەم، چ بکەم تا دلێ من ئارام ببێت؟ یان پرسیارەکێ ئاینی بپرسە...", height=120)
 
-    if st.button("✨ ژ زیرەکیا
-                 
+    if st.button("✨ ژ زیرەکیا دەستکرد بپرسە", use_container_width=True):
+        if not user_prompt.strip():
+            st.warning("تکایە دەستپێکێ پرسیار یان هەستێ خۆ ل خانەیێ بنڤیسە!")
+        elif model is None:
+            st.error("تکایە پێشەکی کلیلا API ل سەرەتا کۆدی دناڤ دەڤۆرا خۆ دا دابنە.")
+        else:
+            with st.spinner("⏳ پزیشکێ ڕۆحانی و ئاینی مژوولی دروستکرنا بەرسڤێیە..."):
+                try:
+                    system_instruction = (
+                        "تو ڕێبەرەکێ شارەزا و هۆشمەند‌ی لە بوارێ دەروونی، ئاینی ئیسلامی و قورئانا پیرۆز. "
+                        "هەر دەما بەکارهێنەر پرسیارەک یان کێشەیەک بنڤیسێت، بەرسڤەکا گەلەک نەرم، ئارامکەر، "
+                        "زانستی و ئیسلامی ب زمانێ کوردی (بادینی یان سۆرانی یا پاک) بدە، و گونجایترین ئایەتێن قورئانێ "
+                        "یان دوعایێن پڕۆتۆکۆلی لەگەڵ ئامۆژگاریێن دەروونی تێدا بونەویسە. بەرسڤا تە نەبی هەمان تشت بۆ هەمی کەسان، بەلکو تایبەت ب وێ پرسیارێ بێت."
+                    )
+                    
+                    full_query = f"{system_instruction}\n\nپرسیاڕا بەکارهێنەری: {user_prompt}"
+                    response = model.generate_content(full_query)
+                    
+                    st.markdown(
+                        f"""
+                        <div class="ai-card">
+                            <div style="font-size: 16px; color: #34d399; font-weight: bold; margin-bottom: 12px;">💡 بەرسڤ و ڕێنماییا ڕۆحانی یا AI:</div>
+                            <div style="font-size: 16px; color: #ffffff; line-height: 1.8; direction: rtl; text-align: right;">
+                                {response.text}
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                except Exception as ex:
+                    st.error(f"تکایە پشکست ڕوودا یان کلیلا API نە دروستە: {ex}")
+
+# --- بەشێ دووەم: مسبحەیا ئەلیکترۆنی ---
+with tab2:
+    st.markdown("<h3 style='text-align: center; color: #34d399;'>📿 مسبحەیا ئەلیکترۆنی یا زکران</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 14px;'>هەر دەمەکێ تو زکرەکێ دکەی، ل دوگمەیێ بکوتە تاوەکو هژمار پاشەکەوت بێت.</p>", unsafe_allow_html=True)
+    
+    if 'zikr_count' not in st.session_state:
+        st.session_state.zikr_count = 0
+
+    st.markdown(f"<div class='counter-display'>{st.session_state.zikr_count}</div>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("➕ زکرەک بکە", use_container_width=True):
+            st.session_state.zikr_count += 1
+            st.rerun()
+    with col2:
+        if st.button("🔄 ژمارەی سفڕ بکە", use_container_width=True):
+            st.session_state.zikr_count = 0
+            st.rerun()
+
+# ناڤێ گەشەپێدەری ب ڕەنگێ کەسک و خطەکێ جوان ل بنۆکەی
+st.markdown("<div class='developer-footer'>✨ دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی 🌿</div>", unsafe_allow_html=True)
