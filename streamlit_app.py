@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # 💡 لێرە لە جهێ "LIRE_KILIL_XI_LERE_DANUR" کلیلێ خۆ یێ AI دابنە
-GOOGLE_API_KEY = "LIRE_KILIL_XI_LERE_DANUR"
+GOOGLE_API_KEY = "AQ.Ab8RN6Lmm0CPbiKl3JWu4jnUS0jMTQ0_5NBNjBYKfFptf2VaKQ"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
@@ -17,7 +17,7 @@ try:
 except Exception as e:
     model = None
 
-# 2. دیزاینا تایبەت (Dark Glassmorphism)
+# 2. دیزاینا تایبەت و گڵۆپێ کەسک (Glowing Animation)
 st.markdown("""
     <style>
     .main {
@@ -54,39 +54,49 @@ st.markdown("""
         padding: 15px;
         margin: 15px 0;
     }
-    .developer-footer {
+    
+    /* گڵۆپێ کەسک یێ بوەست و دڤەمرێت (Glow Animation) */
+    @keyframes glowing {
+        0% { color: #059669; text-shadow: 0 0 2px rgba(52, 211, 153, 0.2); }
+        50% { color: #34d399; text-shadow: 0 0 15px rgba(52, 211, 153, 0.9), 0 0 25px rgba(16, 185, 129, 0.6); }
+        100% { color: #059669; text-shadow: 0 0 2px rgba(52, 211, 153, 0.2); }
+    }
+    
+    .glow-name {
         text-align: center;
-        color: #34d399;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: bold;
-        margin-top: 40px;
-        padding: 15px;
-        border-top: 1px dashed rgba(52, 211, 153, 0.3);
-        letter-spacing: 0.5px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        animation: glowing 2.5s infinite;
+        direction: rtl;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # 3. سەرۆکی پڕۆژەی
 st.markdown("<h1 style='text-align: center; color: #34d399;'>🌿 زکر • پەناگەها دەروونی و ڕۆحانی</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 15px;'>ڕێبەرێ هۆشمەندێ ڕۆحانی؛ هەر پرسیارەکا دەروونی یان ئاینی بنڤیسە تاوەکو AI بەرسڤەکا تایبەت و ب ئایەت و دوعا بۆ تە ئامادە بکەت.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 15px;'>ڕێبەرێ ڕۆحانی؛ هەر پرسیارەکا دەروونی یان ئاینی بنڤیسە تاوەکو بەرسڤەکا تایبەت و ب ئایەت و دوعا بۆ تە ئامادە بکەت.</p>", unsafe_allow_html=True)
+
+# ناڤێ تە یێ گڵۆپێ (ل جهێ خطە سور)
+st.markdown("<div class='glow-name'>✨ دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی 🌿</div>", unsafe_allow_html=True)
 st.markdown("---")
 
-# سیستەمێ تابان (Tabs)
-tab1, tab2 = st.tabs(["🌿 ڕێبەرێ هۆشمەندێ AI", "📿 مسبحەیا ئەلیکترۆنی"])
+# سیستەمێ تابان (Tabs) - بێ ناڤێ AI
+tab1, tab2 = st.tabs(["🌿 ڕێبەرێ ڕۆحانی", "📿 مسبحەیا ئەلیکترۆنی"])
 
-# --- بەشێ یەکەم: زیرەکیا دەستکرد بۆ پرسێن دەروونی و ئاینی ---
+# --- بەشێ یەکەم: بەرسڤدانا دەروونی و ئاینی ---
 with tab1:
     st.markdown("<p style='text-align: right; direction: rtl; color: #34d399; font-weight: bold;'>🧠 پرسیار، کێشە یان هەستێ خۆ لێرە بنڤیسە:</p>", unsafe_allow_html=True)
     user_prompt = st.text_area("", placeholder="بۆ نموونە: ئەز ترسا ژ پاشەڕۆژێ هەم، چ بکەم تا دلێ من ئارام ببێت؟ یان پرسیارەکێ ئاینی بپرسە...", height=120)
 
-    if st.button("✨ ژ زیرەکیا دەستکرد بپرسە", use_container_width=True):
+    if st.button("✨ ڤەکۆلین و وەرگرتنا بەرسڤێ", use_container_width=True):
         if not user_prompt.strip():
             st.warning("تکایە دەستپێکێ پرسیار یان هەستێ خۆ ل خانەیێ بنڤیسە!")
         elif model is None:
-            st.error("تکایە پێشەکی کلیلا API ل سەرەتا کۆدی دناڤ دەڤۆرا خۆ دا دابنە.")
+            st.error("تکایە پێشەکی کلیلا API لە کۆدی دابنە.")
         else:
-            with st.spinner("⏳ پزیشکێ ڕۆحانی و ئاینی مژوولی دروستکرنا بەرسڤێیە..."):
+            with st.spinner("⏳ مژوولی دروستکرنا بەرسڤێیە..."):
                 try:
                     system_instruction = (
                         "تو ڕێبەرەکێ شارەزا و هۆشمەند‌ی لە بوارێ دەروونی، ئاینی ئیسلامی و قورئانا پیرۆز. "
@@ -101,7 +111,7 @@ with tab1:
                     st.markdown(
                         f"""
                         <div class="ai-card">
-                            <div style="font-size: 16px; color: #34d399; font-weight: bold; margin-bottom: 12px;">💡 بەرسڤ و ڕێنماییا ڕۆحانی یا AI:</div>
+                            <div style="font-size: 16px; color: #34d399; font-weight: bold; margin-bottom: 12px;">💡 ڕێنماییا ڕۆحانی:</div>
                             <div style="font-size: 16px; color: #ffffff; line-height: 1.8; direction: rtl; text-align: right;">
                                 {response.text}
                             </div>
@@ -132,5 +142,5 @@ with tab2:
             st.session_state.zikr_count = 0
             st.rerun()
 
-# ناڤێ گەشەپێدەری ب ڕەنگێ کەسک و خطەکێ جوان ل بنۆکەی
-st.markdown("<div class='developer-footer'>✨ دروستکەر و گەشەپێدەر: نوژدار دژوار دۆسکی 🌿</div>", unsafe_allow_html=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #64748b; font-size: 12px;'>پڕۆژەی زکر • گەشەپێدەر: نوژدار دژوار دۆسکی</div>", unsafe_allow_html=True)
