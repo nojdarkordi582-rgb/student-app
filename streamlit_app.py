@@ -8,12 +8,13 @@ st.set_page_config(
     layout="centered"
 )
 
-# 💡 کلیلا تە یا نوی و ڕاستەقینە لێرە هاتە دانان
+# 💡 کلیلا تە لێرە هەیە
 GOOGLE_API_KEY = "AQ.Ab8RN6KAX6TPelZrCaTgGoYnOCdamd8vnYgWLGcfX7wbRrATuA"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # گۆڕینا مۆدێلی بۆ gemini-pro دا لەگەڵ هەمی کلیلان کار بکەت
+    model = genai.GenerativeModel('gemini-pro')
 except Exception as e:
     model = None
 
